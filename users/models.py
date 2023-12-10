@@ -76,8 +76,8 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
         help_text='Specific permissions for this user.',
     )
 
-    REQUIRED_FIELDS = ['email', ]
-    USERNAME_FIELD = 'user_name'
+    REQUIRED_FIELDS = ['user_name', ]
+    USERNAME_FIELD = 'email'
 
     objects = UsersManger()
 

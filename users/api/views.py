@@ -4,12 +4,12 @@ from rest_framework.response import Response
 # from ratings.models import Rating
 from users.models import NewUser
 from users.api.serializers import UserSerializer
-# from django.contrib.auth import get_user_model, login, logout, authenticate
+from django.contrib.auth import get_user_model, login, logout, authenticate
 # from rest_framework.authentication import SessionAuthentication
-
+from rest_framework.views import APIView
 # from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer, UserEditSerializer, AddAdminSerializer
 # from rest_framework import permissions, status
-# from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.models import Token
 # from rest_framework.authentication import TokenAuthentication
 # from ratings.api.serializers import RatingSerializer
 from rest_framework import permissions, status
@@ -54,20 +54,24 @@ def UsersIndex(request):
 #         return Response({'errors': serialized_user.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class UserLogin2(APIView):
-#     permission_classes = (permissions.AllowAny,)
-#     authentication_classes = ()
+class UserLogin2(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
 
-#     def post(self, request):
-#         data = request.data
-#         user = authenticate(username=data['email'], password=data['password'])
-#         if user is not None:
-#             # login(request, user)
-#             print(request.user)
-#             token, created = Token.objects.get_or_create(user=user)
-#             return Response({'token': token.key}, status=status.HTTP_200_OK)
-#         else:
-#             return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+    def post(self, request):
+        data = request.data
+        print(request.data.get('email'))
+        print(request.data.get('password'))
+        email = request.data.get('email')
+        password = request.data.get('password')
+        user = authenticate(username=email, password=password)
+        if user is not None:
+            # login(request, user)
+            # print(request.user)
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 # class UserView(APIView):
